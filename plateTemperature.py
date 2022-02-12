@@ -3,6 +3,8 @@
 Created on Sun Dec 12 13:53:17 2021
 
 @author: josem
+
+
 """
 import numpy as np
 from scipy.interpolate import griddata
