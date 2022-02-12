@@ -15,6 +15,16 @@ class FunctionsG2d:
         else:
             function=(r*self.b)**(2.0*self.q)*np.log(self.b*r)
         return function
+    
+    def quarterCoordinate(self,x,xc,r):
+        coordinate4= ((2)/((x-xc)**3))-((2)/((x-xc)**3))
+        return coordinate4
+    
+    def thirdCoordinate(self,x,xc,r):
+        coordinate3=(1/((r**2)))-(1/((r**2)))
+        return coordinate3
+    #derivadda de r respecto  x
+    
     def secondCoordinate(self,x,xc,r):
         
         if r==0.0:
@@ -24,13 +34,25 @@ class FunctionsG2d:
         
         
         return coordinate2
+    # puntos menos centro
     def firstCoordinate(self,x,xc,r):
         if r==0.0:
             coordinate1=0.0
         else:
             coordinate1= ((x-xc)/r)**2
         return coordinate1
-
+    def quarterDerivateRadial(self,x,xc,r):
+        if r==0:
+            quarter=0
+        else:
+            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)
+        return quarter
+    def thirdDerivativeRadial(self,x,xc,r):
+        if r ==0:
+            third = 0
+        else :
+             third=((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))*((x-xc)/self.r)**3
+        return third
 
     def secondDerivativeRadial(self,r):
         if r==0:
@@ -45,6 +67,7 @@ class FunctionsG2d:
         
             derivative=(self.b)**(2.0*self.q)*r**(2.0*self.q-1.0)*(2.0*self.q*np.log(self.b*r)+self.b)
         return derivative
+    
 class Plate2d(FunctionsG2d):
     def __init__(self,m,n,lx,ly,temp,b,q):
         FunctionsG2d.__init__(self)

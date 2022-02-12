@@ -87,11 +87,14 @@ class ProcessInterpolation:
             derivateG =np.where(self.r==0,0,derivateG)
             secondDerivateG = self.r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.r)+4.0*self.q-2*self.q*np.log(self.r)-1)   
             secondDerivateG=np.where(self.r==0,0,secondDerivateG)     
-            thirdDerivatedG= ((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))*((pointsMonosCenters)/self.r)**3
+            thirdDerivatedG= 3*((pointsMonosCenters)/self.r)*( (1/self.r)-(((pointsMonosCenters)**2.0)/self.r**3.0))*self.r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.r)+4.0*self.q-2*self.q*np.log(self.r)-1)+(((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))*((pointsMonosCenters)/self.r)**3)+((self.r)**(2*self.q-1))*(2*self.q*np.log(self.r)+1)*((pointsMonosCenters)/self.r)*(1/(self.r**2))*((self.r)**(2*self.q-1))*(2*self.q*np.log(self.r)+1)*((pointsMonosCenters)/self.r)
             thirdDerivatedG=np.where(self.r==0,0,thirdDerivatedG)   
-            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)
+            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)*(((pointsMonosCenters)/self.r)**4)+3*(((1/self.r)-((pointsMonosCenters**2)/(self.r**3)))**2)* self.r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.r)+4.0*self.q-2*self.q*np.log(self.r)-1)+6*(((pointsMonosCenters)/self.r)**2)*((1/self.r)-(((pointsMonosCenters)**2)/(self.r**3)))*((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))
+            
+            
             quarter=np.where(self.r==0,0,quarter)   
         else:
+            ##((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))
             print("Error")
         return g, derivateG,secondDerivateG,thirdDerivatedG,quarter
 

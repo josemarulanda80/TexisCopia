@@ -1,11 +1,11 @@
 -Escoger funcion de base radial (1: Multcicuadric, 2: TPS)
 2
 -Tipo De problema a resolver (1. Interpolación; 2. Problema flujo entre 2 placas; 3. Problema flujo entre 1 cilindro; 4. placa de temperatura; 5. aneurisma)
-4
+1
 -Numero de centros
-50
+100
 -Numero de puntos de colocación
-50
+100
 -Escriba el B para la multicuadric
 2
 -Escriba el grado de la TPS
