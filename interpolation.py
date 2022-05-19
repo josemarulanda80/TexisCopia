@@ -6,8 +6,6 @@ Created on Fri Dec 10 15:31:55 2021
 """
 import numpy as np
 import matplotlib.pyplot as plt
-
-
 class InterpolationFBR:
     def __init__(self,m,n,lowerLimit,upperLimit):
         self.m=m
@@ -41,7 +39,6 @@ class InterpolationFBR:
         a=distanceMoreSmall*b
         MQparameter=a.copy()**2
         return MQparameter
-
 class ProcessInterpolation:
     def __init__(self,r,m,q,parameterMQ,typeFunction,x):
         self.r=r
@@ -50,7 +47,6 @@ class ProcessInterpolation:
         self.parameterMQ=parameterMQ
         self.typeFunction=typeFunction
         self.x=x
-
     def matrixA(self):
         matrix=np.zeros((self.m,self.m))
         if self.typeFunction == 1:
@@ -71,8 +67,6 @@ class ProcessInterpolation:
         thirdDerivativeFunctionOscilant=0.06*((21.6*self.x**2)-7*self.x+3)*((-16*np.pi**2)*(1+0.8*np.sin(3*np.pi*self.x))*np.cos(4*np.pi*self.x)-71.0612*np.sin(3*np.pi*self.x)*(1+np.cos(4*np.pi*self.x))-189.496*np.sin(4*np.pi*self.x)*np.cos(3*np.pi*self.x))+0.02*((7.2*self.x**3)-(3.5*self.x**2)+3*self.x+12)*((64*np.pi**3)*(1+0.8*np.sin(3*np.pi*self.x))*np.sin(4*np.pi*self.x)+2678.94*np.sin(3*np.pi*self.x)*np.sin(4*np.pi*self.x)-3571.92*np.cos(3*np.pi*self.x)*np.cos(4*np.pi*self.x)-669.736*np.cos(3*np.pi*self.x)*(1+np.cos(4*np.pi*self.x)))+ 0.864*(1+0.8*np.sin(3*np.pi*self.x))*(1+np.cos(4*np.pi*self.x))+0.06*(43.2*self.x-7)*(7.53982*np.cos(3*np.pi*self.x)*(1+np.cos(4*np.pi*self.x))-4*np.pi*(1+0.8*np.sin(3*np.pi*self.x))*np.sin(4*np.pi*self.x))
         quarterDerivativedFunctionOscilant=0.08*((21.6*self.x**2)-7*self.x+3)*((64*np.pi**3)*(0.8*np.sin(3*np.pi*self.x)+1)*np.sin(4*np.pi*self.x)+2678.94*np.sin(3*np.pi*self.x)*np.sin(4*np.pi*self.x)-3571.92*np.cos(3*np.pi*self.x)*np.cos(4*np.pi*self.x)-669.736*np.cos(3*np.pi*self.x)*(np.cos(4*np.pi*self.x)+1))+0.02*(12+3*self.x-3.5*(self.x**2)+7.2*(self.x**3))*((256*np.pi**4)*(0.8*np.sin(3*np.pi*self.x)+1)*np.cos(4*np.pi*self.x)+67329.2*np.sin(3*np.pi*self.x)*np.cos(4*np.pi*self.x)+6312.11*np.sin(3*np.pi*self.x)*(np.cos(4*np.pi*self.x)+1)+93512.7*np.sin(4*np.pi*self.x)*np.cos(3*np.pi*self.x))+0.12*(43.2*self.x-7)*((-16*np.pi**2)*(0.8*np.sin(3*np.pi*self.x)+1)*np.cos(4*np.pi*self.x)-71.0612*np.sin(3*np.pi*self.x)*(np.cos(4*np.pi*self.x)+1)-189.496*np.sin(4*np.pi*self.x)*np.cos(3*np.pi*self.x))+3.456*(7.53982*np.cos(3*np.pi*self.x)*(np.cos(4*np.pi*self.x)+1)-4*np.pi*(0.8*np.sin(3*np.pi*self.x)+1)*np.sin(4*np.pi*self.x))
         return  realPolynomialFunction,derivativeFunctionPolynomialReal,secondDerivativeFunctionPolynomicsReal,realOscillatingFunction,derivativeOscillatingFunctionReal,secondDerivativeOscillatingFunctionActual,thirdDerivativeFunctionPolynomicReal,thirdDerivativeFunctionOscilant,quarterDerivativedFunctionOscilant,quarterDerivativedFunctionPolynomicReal
-
-
     def functionG(self,pointsMonosCenters,typeFunctionRadial):
         if typeFunctionRadial ==1:
             g = np.sqrt((self.r**2+self.parameterMQ))
@@ -89,15 +83,12 @@ class ProcessInterpolation:
             secondDerivateG=np.where(self.r==0,0,secondDerivateG)     
             thirdDerivatedG= 3*((pointsMonosCenters)/self.r)*( (1/self.r)-(((pointsMonosCenters)**2.0)/self.r**3.0))*self.r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.r)+4.0*self.q-2*self.q*np.log(self.r)-1)+(((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))*((pointsMonosCenters)/self.r)**3)+((self.r)**(2*self.q-1))*(2*self.q*np.log(self.r)+1)*((pointsMonosCenters)/self.r)*(1/(self.r**2))*((self.r)**(2*self.q-1))*(2*self.q*np.log(self.r)+1)*((pointsMonosCenters)/self.r)
             thirdDerivatedG=np.where(self.r==0,0,thirdDerivatedG)   
-            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)*(((pointsMonosCenters)/self.r)**4)+3*(((1/self.r)-((pointsMonosCenters**2)/(self.r**3)))**2)* self.r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.r)+4.0*self.q-2*self.q*np.log(self.r)-1)+6*(((pointsMonosCenters)/self.r)**2)*((1/self.r)-(((pointsMonosCenters)**2)/(self.r**3)))*((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))
-            
-            
+            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)*(((pointsMonosCenters)/self.r)**4)+3*(((1/self.r)-((pointsMonosCenters**2)/(self.r**3)))**2)* self.r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.r)+4.0*self.q-2*self.q*np.log(self.r)-1)+6*(((pointsMonosCenters)/self.r)**2)*((1/self.r)-(((pointsMonosCenters)**2)/(self.r**3)))*((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))                        
             quarter=np.where(self.r==0,0,quarter)   
         else:
             ##((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))
             print("Error")
         return g, derivateG,secondDerivateG,thirdDerivatedG,quarter
-
     def pesosW(self,matrix,y):
         matrixInverse = np.linalg.inv(matrix)
         pesosW =  np.matmul(matrixInverse, y)
@@ -109,7 +100,6 @@ class ProcessInterpolation:
         thirdDerivateNumerica=np.matmul(thirdDerivatedMg,pesosW)
         quarterDerivatived=np.matmul(quarterDerivatived,pesosW)
         return functionNumerica,derivateNumerica,secondDerivateNumerica,thirdDerivateNumerica,quarterDerivatived
-    
     def compareGraphicInterpolation(self,functionNumerica,lowerLimit,upperLimit,left,real,interpolated,title,polynomialfunction):
        plt.figure()
        plt.xlabel('Eje X')
@@ -121,7 +111,6 @@ class ProcessInterpolation:
        plt.legend(loc= left)
        plt.show()
        return plt.show()
-   
     def dataPresentation(self,functionNumerica,lowerLimit,upperLimit,realPolynomialFunction,derivateNumerica,derivativeFunctionPolynomialReal,secondDerivateNumerica,secondDerivativeFunctionPolynomicsReal,functionNumerica1,realOscillatingFunction,derivateNumerica1,derivativeOscillatingFunctionReal,secondDerivateNumerica1,secondDerivativeOscillatingFunctionActual,thirdDerivater,thirdDerivativeFunctionPolynomicReal,thirdDerivater1,thirdDerivativeFunctionOscilant,quarterDerivatived1,quarterDerivativedFunctionOscilant):
         if self.typeFunction==1:
             self.compareGraphicInterpolation(functionNumerica,lowerLimit,upperLimit,'upper left','Función real', 'Función interpolada MQ','Grafica funciones',realPolynomialFunction)

@@ -13,12 +13,12 @@ class FlowCylinder(InterpolationFBR):
         InterpolationFBR.__init__(self,m,n,lowerLimit,upperLimit)
 class FunctiosG:
     def functionTps(self,x,xc,q,b):
-    	r=abs(x-xc)
-    	if r==0.0:
-    		frbf=0.0
-    	else: 
-    		frbf=(r*b)**(2.0*q)*np.log(b*r)
-    	return frbf
+    	 r=abs(x-xc)
+    	 if r==0.0:
+    	  	frbf=0.0
+    	 else: 
+    	  	frbf=(r*b)**(2.0*q)*np.log(b*r)
+    	 return frbf
     def derivateTPS(self,x,xc,q,b):
     	r=abs(x-xc)
     	if r==0:
@@ -26,7 +26,6 @@ class FunctiosG:
     	else:
     		f_dev=(b)**(2.0*q)*r**(2.0*q-1.0)*(2.0*q*np.log(b*r)+b)
     	return f_dev
-
     def secondDerivateTPS(self,x,xc,q,b):
     	r=abs(x-xc)
     	if r==0:
@@ -49,7 +48,6 @@ class ProcessCylinder(ProcessPlates,FunctiosG):
         self.n=n
         self.xc=xc
         self.b=b
-    
     def matrixA(self,pointsMonosCenters,r):
         A = np.zeros((self.m,self.n))
         if self.typeFunction==2:

@@ -80,3 +80,20 @@ class ReadingData():
         largeCylinder= float(lines[43])
         return  radioSphere,radioCylinder, largeCylinder
     #R,b,a = dateInformationSphere('reading.txt')
+    def datePrueba(self):
+        f= open(self.l,'r')
+        lines=f.readlines() 
+        lx=int(lines[45])
+        ly=int(lines[47])
+        deltaPx= float(lines[49])
+        deltaPy=float(lines[51])
+        velocidad={}
+        velocidad['vxSuperior']=float(lines[53])
+        velocidad['vxInferior']=float(lines[55])
+        velocidad['vySuperior']=float(lines[57])
+        velocidad['vyInferior']=float(lines[59])
+        b= float(lines[27])
+        return lx,ly,deltaPx,deltaPy,b,velocidad
+l=ReadingData('reading.txt')
+
+        

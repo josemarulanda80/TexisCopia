@@ -10,9 +10,13 @@ from interpolation import InterpolationFBR,ProcessInterpolation
 from flowbetweenplates import FlowPlates,ProcessPlates
 from cylinder import FlowCylinder,ProcessCylinder
 from plateTemperature import Plate2d
+from armarMatrixtxt import NoLineal
+from ordenandoMatriz import MatrixNavier
 import matplotlib.pyplot as plt
 import sys
+import numpy as np
 from time import time
+import scipy.optimize as opti
 tiempo_inicial = time() 
 datas = ReadingData('reading.txt')
 typeFunctionRadial,typeProblem,m,n=datas.informationBasic()
@@ -56,7 +60,7 @@ with switch(typeProblem) as sw:
          process.showDatas(functionNumerica,k,vx)
      if sw.case(3,True):
          beta=datas.informationMulticuadric()
-         upperSpeed,lowerSpeed,pressureGradient,u,ra5dioCylinder=datas.informationCylinderOrPlates()
+         upperSpeed,lowerSpeed,pressureGradient,u,radioCylinder=datas.informationCylinderOrPlates()
          cylinder=FlowCylinder(m,n,-radioCylinder,radioCylinder)
          x,xc=cylinder.generatePoints(-radioCylinder,radioCylinder)
          pointsMonosCenters=cylinder.functionPointsMonosCenters(x,xc)
@@ -85,6 +89,59 @@ with switch(typeProblem) as sw:
          print(temp['TemperaturaInferior'])
          plt.figure()
          plate.postProceso(arrayNodos[:,0],arrayNodos[:,1],arrayTemperature,'Mapa de calor analitico (°C)')
+     if sw.case(5,True):
+         temp,lx,ly,b=datas.dataTemperatureYplate()
+         plate = Plate2d(m, n, lx, ly, temp, b ,q)
+         x1,xc,y,yc,arrayNodos,format1=plate.generatorPointsPlate()
+         matrix,temperature=plate.matrixA(arrayNodos, format1)
+         non= NoLineal(matrix,temperature,1)
+         pesos = opti.root(non.CalcularSolucionNoLineal,np.ones(len(non.montarMatrix()[0,:])-1),method='lm', jac=None)
+         pesosW=pesos.x
+         g, derivateG,secondDerivateG,erre=plate.functionGTPS(arrayNodos)
+         functionNumerica,derivadaNumerica,segundaDerivadaNumerica=plate.numericalApproximations( g, derivateG,secondDerivateG,pesosW)
+         plate.postProceso(arrayNodos[:,0],arrayNodos[:,1],functionNumerica,'Mapa de calor aproximado (°C)')
+         arrayTemperature=plate.analyticalTemperature(arrayNodos,temp['TemperaturaInferior'])
+         print(temp['TemperaturaInferior'])
+         plt.figure()
+         plate.postProceso(arrayNodos[:,0],arrayNodos[:,1],arrayTemperature,'Mapa de calor analitico (°C)')
+     if sw.case(6,True):
+         lx,ly,deltaPx,deltaPy,b,velocidad=datas.datePrueba()
+         print(datas.datePrueba())
+         plate = Plate2d(m, n, lx, ly, 0, b ,q)
+         l=MatrixNavier(m,n,lx,ly,b,q,deltaPx,deltaPy,velocidad,1)
+         x,xc,y,yc,nodos_mx=l.generarPuntos()
+         eps =0.5
+         while (1+eps !=1):
+             eps=eps/20.0
+         print(eps)    
+         semilla = 1e12*eps
+         x0=np.ones(m*n*2)*semilla
+         pesosW = opti.root(l.noLinearSistem,x0,method='lm',jac=False,options={'col_deriv': 0, 'xtol': 1.49012e-12, 'ftol': 1.49012e-08, 'gtol': 0.0, 'maxiter': 0, 'eps': eps, 'factor': 100, 'diag': None})
+         g, derivateG,secondDerivateG,erre=plate.functionGTPS(nodos_mx)
+         a1=pesosW.x[0:int(n*m)]
+         a2=pesosW.x[int(n*m):]
+         vx=np.matmul(g, a1)
+         vy=np.matmul(g,a2)
+         l.Graf_speed_2D(m,n,lx,ly,nodos_mx,vx,vy)
+     if sw.case(7,True):
+        lx,ly,deltaPx,deltaPy,b,velocidad=datas.datePrueba()
+        plate = Plate2d(m, n, lx, ly, 0, b ,q)
+        l=MatrixNavier(m,n,lx,ly,b,q,deltaPx,deltaPy,velocidad,0)
+        x,xc,y,yc,nodos_mx=l.generarPuntosBlock()
+        eps =0.5
+        while (1+eps !=1):
+             eps=eps/20.0
+        print(eps)    
+        semilla = 1e12*eps
+        x0=np.ones(59*2)*semilla
+        pesosW = opti.root(l.noLinearSistemTwo,x0,method='lm',jac=False,options={'col_deriv': 0, 'xtol': 1.49012e-12, 'ftol': 1.49012e-08, 'gtol': 0.0, 'maxiter': 0, 'eps': eps, 'factor': 100, 'diag': None})
+        g, derivateG,secondDerivateG,erre=plate.functionGTPS(nodos_mx)
+        a1=pesosW.x[0:int(n*m)]
+        a2=pesosW.x[int(n*m):]
+        vx=np.matmul(g, a1)
+        vy=np.matmul(g,a2)
+        l.Graf_speed_2D(m,n,lx,ly,nodos_mx,vx,vy)
+        
 tiempo_final = time() 
 tiempo_ejecucion = tiempo_final - tiempo_inicial
 print('El tiempo de ejecucion fue:',tiempo_ejecucion)

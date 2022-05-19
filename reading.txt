@@ -1,11 +1,11 @@
 -Escoger funcion de base radial (1: Multcicuadric, 2: TPS)
 2
--Tipo De problema a resolver (1. Interpolación; 2. Problema flujo entre 2 placas; 3. Problema flujo entre 1 cilindro; 4. placa de temperatura; 5. aneurisma)
-1
--Numero de centros
-100
--Numero de puntos de colocación
-100
+-Tipo De problema a resolver (1. Interpolación; 2. Problema flujo entre 2 placas; 3. Problema flujo entre 1 cilindro; 4. placa de temperatura;5 prueba, 6 Navier Stok)
+7
+-Numero de centros (Columnas)
+9
+-Numero de puntos de colocación (Filas)
+9
 -Escriba el B para la multicuadric
 2
 -Escriba el grado de la TPS
@@ -15,11 +15,11 @@
 -Limite superior(Distancia entre las placas paralelas)#lo uso en Interpolación para poner el final en x
 1
 Para la placa o el cilindro (Velocidad superior)
-0
+1
 Velocidad inferior
 0
 Gradiente de presion
--30
+2000
 u
 1
 Radio cilindro
@@ -35,10 +35,27 @@ ingrese linea izquierda
 ingrese linea derecha
 0
 Ingrese la longitud horizontal x
-3
+5
 Ingrese la longitud vertical y
-2
+5
 Ingrese el radio de la esfera
 4
 Ingrese el largo del cilindro
 3
+Ingrese largo del vaso
+10
+Ingrese el diametro del vaso
+1
+Presión en x 
+25
+presión en y
+0
+Velocidad superior en x
+0
+velocidad inferior en x
+0
+Velocidad superior en y
+0
+Velocidad inferior en y
+0
+

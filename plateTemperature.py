@@ -17,51 +17,6 @@ class FunctionsG2d:
         else:
             function=(r*self.b)**(2.0*self.q)*np.log(self.b*r)
         return function
-    
-    def quarterCoordinate(self,x,xc,r):
-        coordinate4= ((2)/((x-xc)**3))-((2)/((x-xc)**3))
-        return coordinate4
-    
-    def thirdCoordinate(self,x,xc,r):
-        coordinate3=(1/((r**2)))-(1/((r**2)))
-        return coordinate3
-    #derivadda de r respecto  x
-    
-    def secondCoordinate(self,x,xc,r):
-        
-        if r==0.0:
-            coordinate2=0.0;
-        else:
-            coordinate2= (1/r)-(((x-xc)**2.0)/r**3.0)
-        
-        
-        return coordinate2
-    # puntos menos centro
-    def firstCoordinate(self,x,xc,r):
-        if r==0.0:
-            coordinate1=0.0
-        else:
-            coordinate1= ((x-xc)/r)**2
-        return coordinate1
-    def quarterDerivateRadial(self,x,xc,r):
-        if r==0:
-            quarter=0
-        else:
-            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)
-        return quarter
-    def thirdDerivativeRadial(self,x,xc,r):
-        if r ==0:
-            third = 0
-        else :
-             third=((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))*((x-xc)/self.r)**3
-        return third
-
-    def secondDerivativeRadial(self,r):
-        if r==0:
-            second=0
-        else:
-            second= (self.b**(2.0*self.q))*r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.b*r)+4.0*self.q*self.b-2*self.q*np.log(self.b*r)-self.b)
-        return second
     def derivativeRadial(self,r):
         if r==0:
             derivative=0
@@ -69,7 +24,42 @@ class FunctionsG2d:
         
             derivative=(self.b)**(2.0*self.q)*r**(2.0*self.q-1.0)*(2.0*self.q*np.log(self.b*r)+self.b)
         return derivative
-    
+    def secondDerivativeRadial(self,r):
+        if r==0:
+            second=0
+        else:
+            second= (self.b**(2.0*self.q))*r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.b*r)+4.0*self.q*self.b-2*self.q*np.log(self.b*r)-self.b)
+        return second
+    def thirdDerivativeRadial(self,x,xc,r):
+        if r ==0:
+            third = 0
+        else :
+             third=((2*self.r**(2*self.q-3))*(4*(self.q**3)*np.log(self.r)+6*(self.q**2)*(1-np.log(self.r))+2*self.q*np.log(self.r)-6*self.q+1))*((x-xc)/self.r)**3
+        return third
+    def quarterDerivateRadial(self,x,xc,r):
+        if r==0:
+            quarter=0
+        else:
+            quarter=(self.r**(2.0*self.q-4))*((32*self.q**3)-(72*self.q**2)+4*(4*self.q**3-12*self.q**2+11*self.q-3)*self.q*np.log(self.r)+44*self.q-6)
+        return quarter
+    def firstCoordinate(self,x,xc,r):
+        if r==0.0:
+            coordinate1=0.0
+        else:
+            coordinate1= ((x-xc)/r)
+        return coordinate1
+    def secondCoordinate(self,x,xc,r):    
+        if r==0.0:
+            coordinate2=0.0;
+        else:
+            coordinate2= (1/r)-(((x-xc)**2.0)/r**3.0)
+        return coordinate2
+    def thirdCoordinate(self,x,xc,r):
+        coordinate3=(1/((r**2)))-(1/((r**2)))
+        return coordinate3
+    def quarterCoordinate(self,x,xc,r):
+        coordinate4= ((2)/((x-xc)**3))-((2)/((x-xc)**3))
+        return coordinate4
 class Plate2d(FunctionsG2d):
     def __init__(self,m,n,lx,ly,temp,b,q):
         FunctionsG2d.__init__(self)
@@ -114,14 +104,11 @@ class Plate2d(FunctionsG2d):
                     
                 arrayNodos= nodos
         return x,xc,y,yc,arrayNodos,formato
-   
     def matrixA(self,nodos,e):
         matriz=np.zeros((self.m*self.m,self.n*self.n))
         temp=np.zeros(self.m*self.m)
         for i in range(0,self.n*self.m):
-    
-            if nodos[i][2]==e['TemperaturaIzquierda']:
-    
+            if nodos[i][2]!=5:
                 for j in range(0,self.n*self.m):
                     r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5
                     if r ==0:
@@ -129,44 +116,13 @@ class Plate2d(FunctionsG2d):
                     else:
                         matriz[i,j]= self.functionRadial(r)
                     temp[i]=nodos[i][3]
-                
-          
-            elif nodos[i][2]==e['TemperaturaDerecha']:
-    
-                for j in range(0,self.n*self.m):
-                    r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5
-                    if r ==0:
-                        matriz[i,j]=0
-                    else:
-                        matriz[i,j]= self.functionRadial(r)
-                    temp[i]=nodos[i][3]
-            elif nodos[i][2]==e['TemperaturaInferior']:          
-    
-                for j in range(0,self.n*self.m):
-                    r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5
-                    if r ==0:
-                        matriz[i,j]=0
-                    else:
-                        matriz[i,j]= self.functionRadial(r)
-                    temp[i]=nodos[i][3]
-                   
-            elif nodos[i][2]==e['TemperaturaSuperior']:
-    
-                for j in range(0,self.n*self.m):
-                    r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5
-                    if r ==0:
-                        matriz[i,j]=0
-                    else:
-                        matriz[i,j]= self.functionRadial(r)
-                    temp[i]=nodos[i][3]
-                 
-            else :
+            if nodos[i][2]==5 :
                 for j in range(0,self.n*self.m):
                     r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5
                     if r==0:
                         matriz[i,j]=0
                     else:
-                        matriz[i,j]= self.secondDerivativeRadial(r)* self.firstCoordinate(nodos[i][0],nodos[j][0],r)+self.derivativeRadial(r)*self.secondCoordinate(nodos[i][0],nodos[j][0],r) + self.secondDerivativeRadial(r)* self.firstCoordinate(nodos[i][1],nodos[j][1],r)+self.derivativeRadial(r)*self.secondCoordinate(nodos[i][1],nodos[j][1],r)
+                        matriz[i,j]= self.secondDerivativeRadial(r)* (self.firstCoordinate(nodos[i][0],nodos[j][0],r)**2)+self.derivativeRadial(r)*self.secondCoordinate(nodos[i][0],nodos[j][0],r) + self.secondDerivativeRadial(r)* (self.firstCoordinate(nodos[i][1],nodos[j][1],r)**2)+self.derivativeRadial(r)*self.secondCoordinate(nodos[i][1],nodos[j][1],r)
                     temp[i]=nodos[i][3]
         return matriz, temp
     def pesosW(self,matrix,y):
@@ -174,18 +130,16 @@ class Plate2d(FunctionsG2d):
         pesosW =  np.matmul(matrixInverse, y)
         return pesosW    
     def functionGTPS(self,nodos):
-        r =np.zeros((self.m*self.m,self.n*self.n))
+        erre =np.zeros((self.m*self.n,self.n*self.m))
+        gTPS,derivadagTPS,segundaDerivadagTPS=np.zeros((self.m*self.n,self.n*self.m)),np.zeros((self.m*self.n,self.n*self.m)),np.zeros((self.m*self.n,self.n*self.m))
         for i in range(0,self.n*self.m):
             for j in range(0,self.n*self.m):
-                 r[i,j]=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5
-    
-        gTPS = (r*self.b)**(2.0*self.q)*np.log(self.b*r)
-        gTPS =np.where(r==0,0,gTPS)
-        derivadagTPS =(self.b)**(2.0*self.q)*r**(2.0*self.q-1.0)*(2.0*self.q*np.log(self.b*r)+self.b)
-        derivadagTPS =np.where(r==0,0,derivadagTPS)
-        segundaDerivadagTPS = (self.b**(2.0*self.q))*r**(2.0*(self.q-1))*(4*self.q**2.0*np.log(self.b*r)+4.0*self.q*self.b-2*self.q*np.log(self.b*r)-self.b)
-        segundaDerivadagTPS=np.where(r==0,0,segundaDerivadagTPS)
-        return gTPS,derivadagTPS,segundaDerivadagTPS,r
+                 r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5 
+                 gTPS[i,j] = self.functionRadial(r)
+                 derivadagTPS[i,j]=self.derivativeRadial(r)
+                 segundaDerivadagTPS[i,j]=self.secondDerivativeRadial(r)
+                 erre[i,j]=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5 
+        return gTPS,derivadagTPS,segundaDerivadagTPS,erre
     def numericalApproximations(self,gMQ,derivadagMQ,segundaDerivadagMQ,pesosW):
         funcionNumerica=np.matmul(gMQ,pesosW)
         derivadaNumerica=np.matmul(derivadagMQ,pesosW)
@@ -215,7 +169,6 @@ class Plate2d(FunctionsG2d):
         b=self.ly
         temperature =[]
         sumatoria=0
-        
         for l in range(0,self.m*self.m):
             for i in range(1,114):
                 contador=2*i-1
@@ -229,3 +182,4 @@ class Plate2d(FunctionsG2d):
         arrayTemperatura=np.asarray(temperature)        
         return arrayTemperatura
             
+

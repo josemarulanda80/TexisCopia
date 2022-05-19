@@ -10,20 +10,16 @@ import numpy as np
 # Herencia simple
 # class FlowPlates(ProcessInterpolation):
 #    pass
-
 class FlowPlates(InterpolationFBR):
     def __init__(self,m,n,lowerLimit,upperLimit):
         InterpolationFBR.__init__(self,m,n,lowerLimit,upperLimit)
-       
-
 class ProcessPlates(ProcessInterpolation):
     def __init__(self,r,m,q,parameterMQ,typeFunction,x,upperSpeed,lowerSpeed,pressureGradient,u):
         ProcessInterpolation.__init__(self,r,m,q,parameterMQ,typeFunction,x)
         self.upperSpeed=upperSpeed
         self.lowerSpeed=lowerSpeed
         self.pressureGradient=pressureGradient
-        self.u=u
-        
+        self.u=u        
     def matrixA(self,pointsMonosCenters):
         matrix=np.zeros((self.m,self.m))
         if self.typeFunction == 1:
