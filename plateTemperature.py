@@ -140,6 +140,17 @@ class Plate2d(FunctionsG2d):
                  segundaDerivadagTPS[i,j]=self.secondDerivativeRadial(r)
                  erre[i,j]=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5 
         return gTPS,derivadagTPS,segundaDerivadagTPS,erre
+    def functionGTPS2(self,nodos):
+        erre =np.zeros((73,73))
+        gTPS,derivadagTPS,segundaDerivadagTPS=np.zeros((len(nodos[:,0]),len(nodos[:,0]))),np.zeros((len(nodos[:,0]),len(nodos[:,0]))),np.zeros((len(nodos[:,0]),len(nodos[:,0])))
+        for i in range(0,73):
+            for j in range(0,73):
+                 r=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5 
+                 gTPS[i,j] = self.functionRadial(r)
+                 derivadagTPS[i,j]=self.derivativeRadial(r)
+                 segundaDerivadagTPS[i,j]=self.secondDerivativeRadial(r)
+                 erre[i,j]=((nodos[i][0]-nodos[j][0])**2 + (nodos[i][1]-nodos[j][1])**2)**0.5 
+        return gTPS,derivadagTPS,segundaDerivadagTPS,erre
     def numericalApproximations(self,gMQ,derivadagMQ,segundaDerivadagMQ,pesosW):
         funcionNumerica=np.matmul(gMQ,pesosW)
         derivadaNumerica=np.matmul(derivadagMQ,pesosW)

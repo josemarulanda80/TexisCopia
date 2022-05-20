@@ -126,16 +126,17 @@ with switch(typeProblem) as sw:
      if sw.case(7,True):
         lx,ly,deltaPx,deltaPy,b,velocidad=datas.datePrueba()
         plate = Plate2d(m, n, lx, ly, 0, b ,q)
-        l=MatrixNavier(m,n,lx,ly,b,q,deltaPx,deltaPy,velocidad,0)
+        l=MatrixNavier(m,n,lx,ly,b,q,deltaPx,deltaPy,velocidad,1)
         x,xc,y,yc,nodos_mx=l.generarPuntosBlock()
+        print(len(nodos_mx[:,0]))
         eps =0.5
         while (1+eps !=1):
              eps=eps/20.0
         print(eps)    
         semilla = 1e12*eps
-        x0=np.ones(59*2)*semilla
+        x0=np.ones(len(nodos_mx[:,0])*2)*semilla
         pesosW = opti.root(l.noLinearSistemTwo,x0,method='lm',jac=False,options={'col_deriv': 0, 'xtol': 1.49012e-12, 'ftol': 1.49012e-08, 'gtol': 0.0, 'maxiter': 0, 'eps': eps, 'factor': 100, 'diag': None})
-        g, derivateG,secondDerivateG,erre=plate.functionGTPS(nodos_mx)
+        g, derivateG,secondDerivateG,erre=plate.functionGTPS2(nodos_mx)
         a1=pesosW.x[0:int(n*m)]
         a2=pesosW.x[int(n*m):]
         vx=np.matmul(g, a1)

@@ -7,6 +7,7 @@ Created on Wed Mar 23 19:47:52 2022
 
 from plateTemperature import FunctionsG2d
 import numpy as np
+import math 
 import sys
 
 import matplotlib.pyplot as plt
@@ -76,14 +77,14 @@ class MatrixNavier(FunctionsG2d):
                     if y[j]==0.5:
                       inf_nodos.append([x[i],y[j],6,0]) # Frontera inferior
                     elif y[j]>0.5:
-                      inf_nodos.append([x[i],y[j],8,0]) # Frontera inferior
+                      inf_nodos.append([x[i],y[j],8,0]) # Frontera interna
                 elif round(x[i],2)== round(suma,2) or round(x[i],2)== round(suma1,2):
                     if y[j]<=0.5: 
                         inf_nodos.append([x[i],y[j],7,0]) 
                     else:
                             inf_nodos.append([x[i],y[j],8,0]) 
                 else:
-                      inf_nodos.append([x[i],y[j],5,0]) # 5: interiorr 
+                      inf_nodos.append([x[i],y[j],5,0]) # 5: interior 
                       
                      
                     
@@ -176,7 +177,7 @@ class MatrixNavier(FunctionsG2d):
                     f.write(aux_interior_aumen+"\n")
                     f.write(ecu_continuidad_aumen+"\n")
     def matrixTwo(self):
-            x,xc,y,yc,nodos_mx=self.generarPuntos()
+            x,xc,y,yc,nodos_mx=self.generarPuntosBlock()
             m = len(nodos_mx[:,0])
             n = len(nodos_mx[:,0])
             r=np.zeros((m,n))
@@ -226,7 +227,7 @@ class MatrixNavier(FunctionsG2d):
                             fd2rbf_dy2 = self.secondDerivativeRadial(r)*(self.firstCoordinate(nodos_mx[i][1],nodos_mx[j][1],r)**2)+self.derivativeRadial(r)*self.secondCoordinate(nodos_mx[i][1],nodos_mx[j][1],r)
                             aux_interior += str(1/100)+"*"+"(" +str((fd2rbf_dx2 + (b**2)*fd2rbf_dy2)) +")"+"*"+"(" + "x"+str([j])+"+" +"x"+str([j+n])  +")" +"+"
                             ecu_continuidad += "x"+str([j])+"*"+"("+str(fdrbf_dx)+")"+"+"+"x"+str([j+n])+"*"+"("+str(b*fdrbf_dy)+")" +"+"
-                            aux_interior_aumen = aux_interior+str((b)*(((8*mu)/(np.pi()))*((q)/(0.5**4))))
+                            aux_interior_aumen = aux_interior+str((b)*((8*1*q)/(math.pi*0.5**4)))
                             ecu_continuidad_aumen = ecu_continuidad + str(0.0) 
                          f.write(aux_interior_aumen+"\n")
                          f.write(ecu_continuidad_aumen+"\n")
